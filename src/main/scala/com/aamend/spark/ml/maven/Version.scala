@@ -1,4 +1,4 @@
-package com.aamend.spark.ml
+package com.aamend.spark.ml.maven
 
 import scala.util.{Failure, Success, Try}
 

@@ -1,12 +1,15 @@
 <ivysettings>
-<settings defaultResolver="nexus"/>
-<credentials host="localhost" realm="Sonatype Nexus Repository Manager" username="admin" passwd="admin123"/>
-<property name="nexus-public" value="http://localhost:8081/nexus/content/groups/public"/>
-<property name="nexus-releases" value="http://localhost:8081/nexus/content/repositories/releases"/>
-<property name="nexus-snapshots" value="http://localhost:8081/nexus/content/repositories/snapshots"/>
+<settings defaultResolver="local-chain"/>
 <resolvers>
-    <ibiblio name="nexus" m2compatible="true" root="${nexus-public}"/>
-    <ibiblio name="nexus-snapshots" m2compatible="true" root="${nexus-snapshots}"/>
-    <ibiblio name="nexus-releases" m2compatible="true" root="${nexus-releases}"/>
+    <ibiblio name="nexus-public" root="http://localhost:8081/nexus/content/groups/public" m2compatible="true" />
+    <ibiblio name="nexus-releases" root="http://localhost:8081/nexus/content/repositories/releases" m2compatible="true" />
+    <ibiblio name="nexus-snapshots" root="http://localhost:8081/nexus/content/repositories/snapshots" m2compatible="true" />
+    <ibiblio name="model-governance" root="http://localhost:8081/nexus/content/repositories/model-governance/" m2compatible="true" />
+    <chain name="local-chain">
+        <resolver ref="nexus-public"/>
+        <resolver ref="nexus-releases"/>
+        <resolver ref="nexus-snapshots"/>
+        <resolver ref="model-governance"/>
+    </chain>
 </resolvers>
 </ivysettings>

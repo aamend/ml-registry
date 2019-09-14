@@ -1,8 +1,6 @@
-package com.aamend.spark.ml
+package com.aamend.spark.ml.maven
 
-import java.io.File
-import java.nio.file.Files
-
+import com.typesafe.config.{Config, ConfigFactory}
 import org.apache.maven.repository.internal._
 import org.eclipse.aether.artifact.DefaultArtifact
 import org.eclipse.aether.connector.basic.BasicRepositoryConnectorFactory
@@ -20,10 +18,14 @@ import org.eclipse.aether.{DefaultRepositorySystemSession, RepositorySystem}
 import scala.collection.JavaConversions._
 import scala.util.{Success, Try}
 
-class Nexus(nexusRepositoryReleasesUrl: String, nexusUsername: String, nexusPassword: String) {
+class Nexus() {
 
-  val localRepoTemp: File = Files.createTempDirectory("pipeline").toFile
-  localRepoTemp.deleteOnExit()
+  val config: Config = ConfigFactory.load()
+  val repoId: String = config.getString("model.repository.id")
+  val repoUrl: String = config.getString("model.repository.url")
+  val repoCache: String = config.getString("model.repository.local")
+  val repoUsername: String = config.getString("model.repository.username")
+  val repoPassword: String = config.getString("model.repository.password")
 
   val locator = new DefaultServiceLocator
   locator.addService(classOf[ArtifactDescriptorReader], classOf[DefaultArtifactDescriptorReader])
@@ -36,13 +38,13 @@ class Nexus(nexusRepositoryReleasesUrl: String, nexusUsername: String, nexusPass
   locator.addService(classOf[TransporterFactory], classOf[HttpTransporterFactory])
 
   val repositorySystem: RepositorySystem = locator.getService(classOf[RepositorySystem])
-  val repositoryLocal = new LocalRepository(localRepoTemp)
+  val repositoryLocal = new LocalRepository(repoCache)
 
   val session: DefaultRepositorySystemSession = MavenRepositorySystemUtils.newSession
   session.setLocalRepositoryManager(repositorySystem.newLocalRepositoryManager(session, repositoryLocal))
 
-  val authentication: Authentication = new AuthenticationBuilder().addUsername(nexusUsername).addPassword(nexusPassword).build
-  val repositoryReleases: RemoteRepository = new RemoteRepository.Builder("nexus-releases", "default", nexusRepositoryReleasesUrl).setAuthentication(authentication).build()
+  val authentication: Authentication = new AuthenticationBuilder().addUsername(repoUsername).addPassword(repoPassword).build()
+  val repositoryReleases: RemoteRepository = new RemoteRepository.Builder(repoId, "default", repoUrl).setAuthentication(authentication).build()
 
   def deploy(artifacts: List[Artifact]): Unit = {
     val deployRequest = new DeployRequest

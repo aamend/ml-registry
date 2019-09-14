@@ -1,4 +1,4 @@
-package com.aamend.spark.ml
+package com.aamend.spark.ml.maven
 
 import org.scalatest.{FlatSpec, Matchers}
 

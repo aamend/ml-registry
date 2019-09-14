@@ -10,8 +10,9 @@ package object ml {
   final val watermarkParamDefault = "UNKNOWN"
 
   implicit class ModelDeploy(pipelineModel: PipelineModel) {
+
     def deploy(modelGav: String): String = {
-      AuditPipelineModel.deploy(pipelineModel, modelGav)
+      AuditPipelineModel.deploy(pipelineModel: PipelineModel, modelGav)
     }
   }
 

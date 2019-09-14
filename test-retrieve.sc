@@ -1,4 +1,6 @@
-//spark-shell --conf spark.jars.ivySettings=ivysettings.xml --packages com.aamend.spark:hello-world:1.0.2
+spark-shell \
+  --conf spark.jars.ivySettings=ivysettings.xml \
+  --packages com.aamend.spark:hello-world:latest.release
 
 import org.apache.spark.sql.SparkSession
 import com.aamend.spark.ml._

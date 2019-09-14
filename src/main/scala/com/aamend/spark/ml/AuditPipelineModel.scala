@@ -4,28 +4,27 @@ import java.io.{BufferedWriter, File, FileWriter}
 import java.nio.file.Files
 
 import MLUtils.{extractPipelineFromClasspath, packagePipelineJar}
+import com.aamend.spark.ml.maven.{Artifact, Nexus, Version}
 import org.apache.spark.ml.PipelineModel
 
 import scala.io.Source
 
 object AuditPipelineModel {
 
-  //TODO: configure
-  val nexusUrl = "http://localhost:8081/nexus/content/repositories/releases"
-  val nexusUsername = "admin"
-  val nexusPassword = "admin123"
-
   def resolve(modelId: String): PipelineModel = {
     val tempDir = Files.createTempDirectory("spark-governance").toFile
+    tempDir.deleteOnExit()
     val tempPipFile = new File(tempDir, "pipeline")
     extractPipelineFromClasspath(tempPipFile, modelId)
-    val model = PipelineModel.load(tempPipFile.toURI.toString)
-    tempDir.delete()
-    model
+    PipelineModel.load(tempPipFile.toURI.toString)
   }
 
-  def deploy(pipelineModel: PipelineModel, modelGav: String): String = {
-    val nexus = new Nexus(nexusUrl, nexusUsername, nexusPassword)
+  def deploy(
+              pipelineModel: PipelineModel,
+              modelGav: String
+            ): String = {
+
+    val nexus = new Nexus()
     val artifact = Artifact(modelGav)
     val version = getNextVersion(artifact, nexus)
     val artifacts = prepare(pipelineModel, artifact.copy(version = version))
@@ -33,14 +32,23 @@ object AuditPipelineModel {
     artifacts.head.toString
   }
 
-  private def prepare(pipelineModel: PipelineModel, artifact: Artifact): List[Artifact] = {
+  private def prepare(
+                       pipelineModel: PipelineModel,
+                       artifact: Artifact
+                     ): List[Artifact] = {
+
     val tempDir = Files.createTempDirectory("spark-governance").toFile
+    tempDir.deleteOnExit()
     val pom = artifact.addFile(preparePom(artifact, tempDir))
     val jar = artifact.addFile(preparePipelineModel(pipelineModel, artifact, tempDir))
     List(pom, jar)
   }
 
-  private def getNextVersion(artifact: Artifact, nexus: Nexus): Version = {
+  private def getNextVersion(
+                              artifact: Artifact,
+                              nexus: Nexus
+                            ): Version = {
+
     artifact.version.buildNumber match {
       case Some(_) => artifact.version
       case None => nexus.getNextVersion(artifact)

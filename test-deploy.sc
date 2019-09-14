@@ -1,4 +1,8 @@
-//spark-shell --conf spark.jars.ivySettings=ivysettings.xml --packages com.aamend.spark:spark-governance:1.0-SNAPSHOT
+spark-shell \
+  --conf spark.jars.ivySettings=ivysettings.xml \
+  --files application.conf \
+  --driver-java-options -Dconfig.file=application.conf \
+  --packages com.aamend.spark:spark-governance:1.5-SNAPSHOT
 
 import org.apache.spark.ml.classification.LogisticRegression
 import org.apache.spark.ml.feature.{HashingTF, Tokenizer}
@@ -13,5 +17,4 @@ val hashingTF = new HashingTF().setNumFeatures(1000).setInputCol(tokenizer.getOu
 val lr = new LogisticRegression().setMaxIter(10).setRegParam(0.001)
 val pipeline = new Pipeline().setStages(Array(tokenizer, hashingTF, lr))
 val model = pipeline.fit(training)
-val artifact = model.deploy("com.aamend.spark:hello-world:1.0")
-println(artifact)
+model.deploy("com.aamend.spark:hello-world:1.0")
