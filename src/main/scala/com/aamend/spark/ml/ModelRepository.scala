@@ -3,13 +3,18 @@ package com.aamend.spark.ml
 import java.io.{BufferedWriter, File, FileWriter}
 import java.nio.file.Files
 
-import MLUtils.{extractPipelineFromClasspath, packagePipelineJar}
-import com.aamend.spark.ml.maven.{Artifact, Nexus, Version}
+import com.aamend.spark.ml.maven.{Artifact, ModelRepositoryImpl, Version}
+import com.aamend.spark.ml.io._
 import org.apache.spark.ml.PipelineModel
 
 import scala.io.Source
 
-object AuditPipelineModel {
+trait ModelRepository {
+  def getNextVersion(artifact: Artifact): Version
+  def deploy(artifacts: List[Artifact]): Unit
+}
+
+object ModelRepository {
 
   def resolve(modelId: String): PipelineModel = {
     val tempDir = Files.createTempDirectory("spark-governance").toFile
@@ -19,16 +24,35 @@ object AuditPipelineModel {
     PipelineModel.load(tempPipFile.toURI.toString)
   }
 
-  def deploy(
-              pipelineModel: PipelineModel,
-              modelGav: String
-            ): String = {
+  def deploy(pipelineModel: PipelineModel, modelGav: String): String = {
+    val repository = ModelRepositoryImpl()
+    deploy(pipelineModel, modelGav, repository)
+  }
 
-    val nexus = new Nexus()
+  def deploy(pipelineModel: PipelineModel, modelGav: String, repoId: String, repoUrl: String, repoUsername: String, repoPassword: String): String = {
+    val repository = ModelRepositoryImpl(repoId, repoUrl, repoUsername, repoPassword)
+    deploy(pipelineModel, modelGav, repository)
+  }
+
+  private def deploy(pipelineModel: PipelineModel,
+             modelGav: String,
+             repository: ModelRepository
+            ) = {
+
     val artifact = Artifact(modelGav)
-    val version = getNextVersion(artifact, nexus)
+    val version = getNextVersion(artifact, repository)
+
+    // Enrich pipeline with version number
+    pipelineModel.stages.find(_.isInstanceOf[Watermark]).map(transformer => {
+      transformer.
+        asInstanceOf[Watermark].
+        setGroupId(artifact.groupId).
+        setArtifactId(artifact.artifactId).
+        setVersion(version.toString)
+    })
+
     val artifacts = prepare(pipelineModel, artifact.copy(version = version))
-    nexus.deploy(artifacts)
+    repository.deploy(artifacts)
     artifacts.head.toString
   }
 
@@ -46,7 +70,7 @@ object AuditPipelineModel {
 
   private def getNextVersion(
                               artifact: Artifact,
-                              nexus: Nexus
+                              nexus: ModelRepository
                             ): Version = {
 
     artifact.version.buildNumber match {

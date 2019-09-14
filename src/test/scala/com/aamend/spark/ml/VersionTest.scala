@@ -1,5 +1,6 @@
-package com.aamend.spark.ml.maven
+package com.aamend.spark.ml
 
+import com.aamend.spark.ml.maven.Version
 import org.scalatest.{FlatSpec, Matchers}
 
 class VersionTest extends FlatSpec with Matchers {
