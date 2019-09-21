@@ -1,0 +1,15 @@
+<ivysettings>
+<settings defaultResolver="local-chain"/>
+<resolvers>
+    <ibiblio name="nexus-public" root="http://localhost:8081/nexus/content/groups/public" m2compatible="true" />
+    <ibiblio name="nexus-releases" root="http://localhost:8081/nexus/content/repositories/releases" m2compatible="true" />
+    <ibiblio name="nexus-snapshots" root="http://localhost:8081/nexus/content/repositories/snapshots" m2compatible="true" />
+    <ibiblio name="model-governance" root="http://localhost:8081/nexus/content/repositories/model-governance/" m2compatible="true" />
+    <chain name="local-chain">
+        <resolver ref="nexus-public"/>
+        <resolver ref="nexus-releases"/>
+        <resolver ref="nexus-snapshots"/>
+        <resolver ref="model-governance"/>
+    </chain>
+</resolvers>
+</ivysettings>

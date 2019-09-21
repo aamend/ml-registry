@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.aamend.spark</groupId>
     <artifactId>spark-governance</artifactId>
-    <version>2.0</version>
+    <version>1.8-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -13,19 +16,8 @@
         <spark.version>2.3.0</spark.version>
         <java.version>1.8</java.version>
         <aether.version>1.1.0</aether.version>
-        <maven.version>3.3.9</maven.version>
+        <maven.version>3.6.2</maven.version>
     </properties>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>local-nexus</id>
-            <url>http://localhost:8081/nexus/content/repositories/snapshots/</url>
-        </snapshotRepository>
-        <repository>
-            <id>local-nexus</id>
-            <url>http://localhost:8081/nexus/content/repositories/releases/</url>
-        </repository>
-    </distributionManagement>
 
     <dependencies>
         <!--SCALA DEPENDENCIES (provided)-->
@@ -60,7 +52,7 @@
             <version>${spark.version}</version>
             <scope>provided</scope>
         </dependency>
-        <!--USER DEPENDENCIES-->
+        <!--NEXUS DEPENDENCIES-->
         <dependency>
             <groupId>org.eclipse.aether</groupId>
             <artifactId>aether-impl</artifactId>
@@ -83,20 +75,30 @@
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
-            <artifactId>maven-aether-provider</artifactId>
+            <artifactId>maven-resolver-provider</artifactId>
             <version>${maven.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.typesafe</groupId>
-            <artifactId>config</artifactId>
-            <version>1.3.4</version>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-settings-builder</artifactId>
+            <version>${maven.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.6</version>
         </dependency>
-        <!--TEST DEPENDENCIES (test)-->
+        <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-slf4j-logging</artifactId>
+            <version>1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.typesafe</groupId>
+            <artifactId>config</artifactId>
+            <version>1.3.3</version>
+        </dependency>
+        <!--TEST DEPENDENCIES-->
         <dependency>
             <groupId>org.scalatest</groupId>
             <artifactId>scalatest_${scala.binary.version}</artifactId>
@@ -111,7 +113,24 @@
         </dependency>
     </dependencies>
 
+    <distributionManagement>
+        <snapshotRepository>
+            <id>local-nexus</id>
+            <url>http://localhost:8081/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+        <repository>
+            <id>local-nexus</id>
+            <url>http://localhost:8081/nexus/content/repositories/releases/</url>
+        </repository>
+    </distributionManagement>
+
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
