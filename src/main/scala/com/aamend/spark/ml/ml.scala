@@ -11,19 +11,32 @@ package object ml {
   final val versionParamName = "version"
   final val defaultValue = "UNKNOWN"
 
+  /**
+   * Simple wrapper that contains pipeline GAV to enrich original dataframe post transformations.
+   * @param groupId the pipeline model groupId to reflect model coordinates in model repository
+   * @param artifactId the pipeline model artifactId to reflect model coordinates in model repository
+   * @param version the pipeline model version to reflect model coordinates in model repository
+   */
   case class PipelineWatermark(groupId: String, artifactId: String, version: String)
 
   implicit class PipelineDeploy(pipelineModel: PipelineModel) {
-    def deploy(modelGav: String): String = {
-      ModelRepository.deploy(pipelineModel: PipelineModel, modelGav)
+    /**
+     * Deploy a trained pipeline model to model repository (nexus or artifactory)
+     * @param gav the pipeline model coordinate to deploy
+     * @return the exact GAV with correct version number and build number as deployed onto model repository
+     */
+    def deploy(gav: String): String = {
+      ModelRepository.deploy(pipelineModel: PipelineModel, gav)
     }
   }
 
-  def loadPipelineModel(pipelineId: String): PipelineModel = {
+  /**
+   * Extract a model from classpath and load a spark pipeline model
+   * @param pipelineId the root classpath folder containing serialized model. Usually the model artifactId
+   * @return a trained pipeline model deserialized
+   */
+  def loadPipeline(pipelineId: String): PipelineModel = {
     ModelRepository.resolve(pipelineId)
   }
 
-  def loadPipeline(modelId: String): PipelineModel = {
-    ModelRepository.resolve(modelId)
-  }
 }
