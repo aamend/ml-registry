@@ -28,6 +28,19 @@ package object ml {
     def deploy(gav: String): String = {
       ModelRepository.deploy(pipelineModel: PipelineModel, gav)
     }
+
+    /**
+     * Deploy a trained pipeline model to model repository (nexus or artifactory)
+     * @param gav the pipeline model coordinate to deploy
+     * @param repoId the nexus repository ID
+     * @param repoUrl the nexus repository URL
+     * @param repoUsername the nexus repository username
+     * @param repoPassword the nexus repository password
+     * @return the exact GAV with correct version number and build number as deployed onto model repository
+     */
+    def deploy(gav: String, repoId: String, repoUrl: String, repoUsername: String, repoPassword: String): String = {
+      ModelRepository.deploy(pipelineModel: PipelineModel, gav, repoId, repoUrl, repoUsername, repoPassword)
+    }
   }
 
   /**

@@ -12,10 +12,10 @@ import scala.annotation.tailrec
 package object io {
 
   /**
-   * Read content of pipeline model stored on local FS and write a Jar file where model can be added to application classpath
+   * Read content of a pipeline model stored on local FS and write a Jar file where model can be added to application classpath
    * @param inputPath pipeline model location on local FS
-   * @param outputFile Jar file that will be created to contain pipeline model
-   * @param artifactId root classpath folder that will contain serialized pipeline model object
+   * @param outputFile Jar file that will contain trained pipeline model
+   * @param artifactId root classpath folder that will contain serialized pipeline model object (e.g. name of the model)
    */
   def packagePipelineJar(inputPath: File, outputFile: File, artifactId: String): Unit = {
     require(inputPath.exists() && inputPath.isDirectory, "Input path does not exist")
@@ -31,8 +31,8 @@ package object io {
   }
 
   /**
-   * Extracting a pipeline model from classpath, outputing model to local FS that can be read through Spark engine
-   * @param outputPath Where pipeline model in classpath will be extracted
+   * Extracting a pipeline model from classpath, output model to local FS that can be read through Spark engine
+   * @param outputPath Where pipeline model in classpath will be extracted to
    * @param artifactId The name of the pipeline we can find on classpath
    */
   def extractPipelineFromClasspath(outputPath: File, artifactId: String): Unit = {
