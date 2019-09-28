@@ -28,7 +28,7 @@ leveraging software delivery tools such as maven and nexus. In short, this libra
 
 Following such a discipline, one can reach the holy grail of data science,
 **online machine learning**, where new models are constantly retrained and "injected"
-to your operation environment (e.g. in real time) as reported in below HL workflow.
+to your operation environment (could be in real time in a typical lambda architecture) as reported in below HL workflow.
 
 ![ml-flow](ml-flow.png)
 
@@ -74,6 +74,12 @@ The requirement is to have a maven2 repository created to host machine learning 
 Models will be deployed as per standard Java dependencies
 
 ![ml-registry](model_repository.png)
+
+Note that we purposely did not enable `SNAPSHOT` feature of machine learning models as we consider each iteration 
+of a model as immutable release (any new model will result in version increment). 
+To operate under full governance, it is advise to use multiple repositories (e.g. prod and test) where only validated
+models (e.g. through QA) can be promoted from one Nexus repository to another. 
+Out of scope here, this could be enabled through standard devops methodologies.
 
 ## Usage
 
