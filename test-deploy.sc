@@ -1,8 +1,10 @@
+/*
 spark-shell \
   --conf spark.jars.ivySettings=ivysettings.xml \
   --files application.conf \
   --driver-java-options -Dconfig.file=application.conf \
   --packages com.aamend.spark:spark-governance:latest.snapshots
+*/
 
 import org.apache.spark.ml.classification.LogisticRegression
 import org.apache.spark.ml.feature.{HashingTF, Tokenizer}
