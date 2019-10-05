@@ -38,19 +38,20 @@ object MLRegistry {
   private def deploy(pipelineModel: PipelineModel,
              modelGav: String,
              repository: MLRegistry
-            ) = {
+            ): String = {
 
     val artifact = Artifact(modelGav)
     val version = getNextVersion(artifact, repository)
+    val newArtifact = artifact.copy(version = version)
 
     // Enrich pipeline with version number
     pipelineModel.stages.find(_.isInstanceOf[Watermark]).map(transformer => {
       transformer.
         asInstanceOf[Watermark].
-        setWatermark(artifact.toString)
+        setWatermark(newArtifact.toString)
     })
 
-    val artifacts = prepare(pipelineModel, artifact.copy(version = version))
+    val artifacts = prepare(pipelineModel, newArtifact)
     repository.deploy(artifacts)
     artifacts.head.toString
   }

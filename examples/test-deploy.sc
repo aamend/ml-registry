@@ -2,7 +2,8 @@
 spark-shell \
   --files application.conf \
   --driver-java-options -Dconfig.file=application.conf \
-  --packages com.aamend.spark:ml-registry:latest.release
+  --conf spark.jars.ivySettings=ivysettings.xml \
+  --packages com.aamend.spark:ml-registry:latest.snapshots
 */
 
 import org.apache.spark.ml.classification.LogisticRegression
