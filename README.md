@@ -3,6 +3,9 @@
 This project aims at bringing a key building block that makes
 Spark ML actionable in corporate environment - *model devops and governance*.
 
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.aamend.spark/spark-governance/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.aamend.spark/spark-governance)
+[![Build Status](https://travis-ci.org/aamend/spark-governance.svg?branch=master)](https://travis-ci.org/aamend/spark-governance)
+
 ## Principles
 
 We enrich Spark ML framework to enable governance of machine learning models,
@@ -80,7 +83,7 @@ models (e.g. validated through a QA process) can be promoted from one to another
 
 ## Usage
 
-Using this project in your spark environment
+Available as a [spark package](https://spark-packages.org/package/aamend/spark-governance), include this package in your Spark Applications as follows
 
 ```shell script
 spark-shell --packages com.aamend.spark:spark-governance:latest.release
@@ -120,20 +123,23 @@ spark-shell \
   --packages com.aamend.spark:spark-governance:latest.release
 ```
 
-or adding `application.conf` in your project classpath. 
+or adding `application.conf` in your project classpath. Configuration needs to contain the following information
 
 ```shell script
 model {
     repository {
         id: "model-governance"
-        url: "http://localhost:8081/nexus/content/repositories/model-governance/"
-        username: "admin"
-        password: "admin123"
+        url: "http://localhost:8081/repository/ml-repository/"
+        username: "5gEa1ez2"
+        password: "Rl5PpGxICA-vh8-cghkJoq3i3tWAmKJtqgOoYpZqhh-f"
     }
 }
 ```
 
-Alternatively, one can pass nexus credentials to their `deploy` function explicitly
+Note thayt we highly recommend enabling [User Tokens settings on Nexus](https://help.sonatype.com/repomanager3/security/security-setup-with-user-tokens#SecuritySetupwithUserTokens-EnablingandResettingUserTokens) 
+to encrypt username / password. 
+
+Alternatively, one can pass nexus credentials to `deploy` function explicitly
 
 ```scala
 import com.aamend.spark.ml._
@@ -142,8 +148,8 @@ ModelRepository.deploy(
   gav = "com.aamend.spark:hello-world:1.0",
   repoId = "model-governance",
   repoURL = "http://localhost:8081/nexus/content/repositories/model-governance/",
-  repoUsername = "admin",
-  repoPassword = "admin123"
+  repoUsername = "5gEa1ez2",
+  repoPassword = "Rl5PpGxICA-vh8-cghkJoq3i3tWAmKJtqgOoYpZqhh-f"
 )
 ```
 

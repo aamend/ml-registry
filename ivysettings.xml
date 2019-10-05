@@ -1,15 +1,20 @@
 <ivysettings>
 <settings defaultResolver="local-chain"/>
-<resolvers>
-    <ibiblio name="nexus-public" root="http://localhost:8081/nexus/content/groups/public" m2compatible="true" />
-    <ibiblio name="nexus-releases" root="http://localhost:8081/nexus/content/repositories/releases" m2compatible="true" />
-    <ibiblio name="nexus-snapshots" root="http://localhost:8081/nexus/content/repositories/snapshots" m2compatible="true" />
-    <ibiblio name="model-governance" root="http://localhost:8081/nexus/content/repositories/model-governance/" m2compatible="true" />
-    <chain name="local-chain">
-        <resolver ref="nexus-public"/>
-        <resolver ref="nexus-releases"/>
-        <resolver ref="nexus-snapshots"/>
-        <resolver ref="model-governance"/>
-    </chain>
-</resolvers>
+    <property name="repo.host" value="localhost" override="false"/>
+    <property name="repo.realm" value="Sonatype Nexus Repository Manager" override="false"/>
+    <property name="repo.user" value="5gEa1ez2"  override="false"/>
+    <property name="repo.pass" value="Rl5PpGxICA-vh8-cghkJoq3i3tWAmKJtqgOoYpZqhh-f"  override="false"/>
+    <credentials host="${repo.host}" realm="${repo.realm}" username="${repo.user}" passwd="${repo.pass}"/>
+    <resolvers>
+        <ibiblio name="nexus-public" root="http://localhost:8081/repository/maven-public/" m2compatible="true" />
+        <ibiblio name="nexus-releases" root="http://localhost:8081/repository/maven-releases/" m2compatible="true" />
+        <ibiblio name="nexus-snapshots" root="http://localhost:8081/repository/maven-snapshots/" m2compatible="true" />
+        <ibiblio name="model-governance" root="http://localhost:8081/repository/ml-repository/" m2compatible="true" />
+        <chain name="local-chain">
+            <resolver ref="nexus-public"/>
+            <resolver ref="nexus-releases"/>
+            <resolver ref="nexus-snapshots"/>
+            <resolver ref="model-governance"/>
+        </chain>
+    </resolvers>
 </ivysettings>

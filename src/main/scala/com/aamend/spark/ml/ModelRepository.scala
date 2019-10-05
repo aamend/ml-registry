@@ -30,7 +30,8 @@ object ModelRepository {
     val tempDir = Files.createTempDirectory("spark-governance").toFile
     tempDir.deleteOnExit()
     val tempPipFile = new File(tempDir, "pipeline")
-    extractPipelineFromClasspath(tempPipFile, modelGav.split(":", 2).mkString("/"))
+    val rootPath = gavToClasspathFolder(modelGav)
+    extractPipelineFromClasspath(tempPipFile, rootPath)
     PipelineModel.load(tempPipFile.toURI.toString)
   }
 
@@ -106,8 +107,16 @@ object ModelRepository {
     val tempPipFile = new File(tempDir, "pipeline-model")
     val tempJarFile = new File(tempDir, "pipeline-model.jar")
     pipelineModel.save(tempPipFile.toURI.toString)
-    packagePipelineJar(tempPipFile, tempJarFile, artifact.groupId + "/" + artifact.artifactId)
+    packagePipelineJar(tempPipFile, tempJarFile, gavToClasspathFolder(artifact.toString))
     tempJarFile
   }
+
+  private def gavToClasspathFolder(gav: String) = {
+    gav.split(":").take(2) match {
+      case Array(groupId, artifactId) => (groupId.split("\\.") :+ artifactId).mkString("/")
+      case _ => throw new IllegalArgumentException("modelGav must be of format [groupId:artifactId]")
+    }
+  }
+
 
 }
