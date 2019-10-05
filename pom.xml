@@ -9,6 +9,10 @@
     <artifactId>ml-registry</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <name>Spark ML Registry</name>
+    <inceptionYear>2019</inceptionYear>
+    <url>https://github.com/aamend/ml-registry</url>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <scala.version>2.11.8</scala.version>
@@ -20,7 +24,7 @@
     </properties>
 
     <description>
-	    Enabling continuous improvement of Spark ML pipeline through 
+	    Enabling continuous deployment of Spark ML pipelines through
 	    use of Devops methodologies and ML governance
     </description>
 
@@ -29,8 +33,6 @@
         <connection>scm:git:git@github.com:aamend/ml-registry.git</connection>
         <tag>ml-registry</tag>
     </scm>
-
-    <inceptionYear>2019</inceptionYear>
 
     <developers>
         <developer>
