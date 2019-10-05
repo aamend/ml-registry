@@ -66,6 +66,7 @@ The corresponding maven dependency can be added to java / scala based project us
 We use nexus as a central model registry.
 Setting up nexus is relatively easy and should already be de facto standard in your organisation. 
 Project requires a `maven2` release repository to be created in order to host versioned pipeline models as per any standard Java dependency.
+It also requires http connection between edge nodes used to run Spark job and nexus interface.
 
 ![ml-registry](images/ml-registry.png)
 

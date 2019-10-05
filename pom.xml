@@ -24,6 +24,12 @@
 	    use of Devops methodologies and ML governance
     </description>
 
+    <scm>
+        <url>https://github.com/aamend/ml-registry</url>
+        <connection>scm:git:git@github.com:aamend/ml-registry.git</connection>
+        <tag>ml-registry</tag>
+    </scm>
+
     <inceptionYear>2019</inceptionYear>
 
     <developers>
