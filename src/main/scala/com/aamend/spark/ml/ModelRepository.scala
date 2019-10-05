@@ -16,11 +16,22 @@ trait ModelRepository {
 
 object ModelRepository {
 
-  def resolve(modelId: String): PipelineModel = {
+  def save(pipelineModel: PipelineModel, path: String): Unit = {
+    // Enrich pipeline with location
+    pipelineModel.stages.find(_.isInstanceOf[Watermark]).map(transformer => {
+      transformer.
+        asInstanceOf[Watermark].
+        setWatermark(path)
+    })
+    pipelineModel.save(path)
+  }
+
+  def resolve(modelGav: String): PipelineModel = {
     val tempDir = Files.createTempDirectory("spark-governance").toFile
     tempDir.deleteOnExit()
     val tempPipFile = new File(tempDir, "pipeline")
-    extractPipelineFromClasspath(tempPipFile, modelId)
+    val rootPath = gavToClasspathFolder(modelGav)
+    extractPipelineFromClasspath(tempPipFile, rootPath)
     PipelineModel.load(tempPipFile.toURI.toString)
   }
 
@@ -46,9 +57,7 @@ object ModelRepository {
     pipelineModel.stages.find(_.isInstanceOf[Watermark]).map(transformer => {
       transformer.
         asInstanceOf[Watermark].
-        setGroupId(artifact.groupId).
-        setArtifactId(artifact.artifactId).
-        setVersion(version.toString)
+        setWatermark(artifact.toString)
     })
 
     val artifacts = prepare(pipelineModel, artifact.copy(version = version))
@@ -98,8 +107,16 @@ object ModelRepository {
     val tempPipFile = new File(tempDir, "pipeline-model")
     val tempJarFile = new File(tempDir, "pipeline-model.jar")
     pipelineModel.save(tempPipFile.toURI.toString)
-    packagePipelineJar(tempPipFile, tempJarFile, artifact.artifactId)
+    packagePipelineJar(tempPipFile, tempJarFile, gavToClasspathFolder(artifact.toString))
     tempJarFile
   }
+
+  private def gavToClasspathFolder(gav: String) = {
+    gav.split(":").take(2) match {
+      case Array(groupId, artifactId) => (groupId.split("\\.") :+ artifactId).mkString("/")
+      case _ => throw new IllegalArgumentException("modelGav must be of format [groupId:artifactId]")
+    }
+  }
+
 
 }

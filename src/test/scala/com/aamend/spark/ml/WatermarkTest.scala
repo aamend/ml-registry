@@ -32,16 +32,13 @@ class WatermarkTest extends SparkSpec with Matchers {
     val training = spark.getDF
 
     // Configure an ML pipeline with non existing column
-    val waterMark = new Watermark().setWatermarkColumn("pipeline").setGroupId("GROUP").setArtifactId("ARTIFACT").setVersion("VERSION")
+    val waterMark = new Watermark().setWatermarkCol("pipeline").setWatermark("GROUP:ARTIFACT:VERSION")
     val pipeline = new Pipeline().setStages(Array(waterMark))
 
     // Make sure all versions are consistent
     val df = pipeline.fit(training).transform(training).cache()
     df.show(100, truncate = false)
-    df.select("pipeline.groupId").rdd.map(r => r.getAs[String]("groupId")).collect().toSet should be(Set("GROUP"))
-    df.select("pipeline.artifactId").rdd.map(r => r.getAs[String]("artifactId")).collect().toSet should be(Set("ARTIFACT"))
-    df.select("pipeline.version").rdd.map(r => r.getAs[String]("version")).collect().toSet should be(Set("VERSION"))
-
+    df.select("pipeline").rdd.map(r => r.getAs[String]("pipeline")).collect().toSet should be(Set("GROUP:ARTIFACT:VERSION"))
   }
 
   sparkTest("testing pipeline with existing watermarked field") { spark =>
@@ -49,7 +46,7 @@ class WatermarkTest extends SparkSpec with Matchers {
     val training = spark.getDF.withColumn("version", lit(1))
 
     // Configure an ML pipeline with existing column
-    val waterMark = new Watermark().setWatermarkColumn("version")
+    val waterMark = new Watermark().setWatermarkCol("version")
     val pipeline = new Pipeline().setStages(Array(waterMark))
 
     // An exception should be raised 'outputCol already exist'

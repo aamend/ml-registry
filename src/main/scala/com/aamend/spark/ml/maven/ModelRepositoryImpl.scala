@@ -31,7 +31,7 @@ object ModelRepositoryImpl {
   val repoPassword: Option[String] = Try(config.getString("model.repository.password")).toOption
 
   /**
-   * Create a new Model repository instance where connection details are found from typesafe provided configuration.
+   * Create a new Model repository instance where connection details can be found from typesafe provided configuration.
    * An application.conf must be supplied and contains the following
    * - model.repository.id: the model repository Id
    * - model.repository.url: the model repository url
@@ -108,7 +108,6 @@ class ModelRepositoryImpl(repoId: String, repoUrl: String, repoUsername: String,
 
   /**
     * Retrieve all artifact versions from repository given the provided maven version pattern
-    *
     * @see <a href="https://docs.oracle.com/middleware/1212/core/MAVEN/maven_version.htm#MAVEN402">https://docs.oracle.com/middleware/1212/core/MAVEN/maven_version.htm#MAVEN402</a>
     * @param artifact the artifact to retrieve, containing GroupId and ArtifactId as well as classifier
     * @param versionRange  the maven version specific pattern, could be exact match [1.0.0] or range [1,2.0)

@@ -7,7 +7,7 @@
 
     <groupId>com.aamend.spark</groupId>
     <artifactId>spark-governance</artifactId>
-    <version>1.8-SNAPSHOT</version>
+    <version>1.0</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -116,11 +116,11 @@
     <distributionManagement>
         <snapshotRepository>
             <id>local-nexus</id>
-            <url>http://localhost:8081/nexus/content/repositories/snapshots/</url>
+            <url>http://localhost:8081/repository/maven-snapshots/</url>
         </snapshotRepository>
         <repository>
             <id>local-nexus</id>
-            <url>http://localhost:8081/nexus/content/repositories/releases/</url>
+            <url>http://localhost:8081/repository/maven-releases/</url>
         </repository>
     </distributionManagement>
 
