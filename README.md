@@ -209,10 +209,9 @@ For each record, we know the exact version of the model used.
 
 Ideally, this extra information at a record level must serve model monitoring, covering below user stories
 
-| -------- | -------------- |
-| **As a** | data scientist |
-| **I want to** | be informed whenever performance of my model degrade |
-| **so that** | I can retrain a new model and deploy via the above methodology |
++ **As a** data scientist
++ **I want to** be informed whenever performance of my model degrade
++ **so that** I can retrain a new model and deploy via the above methodology
 
 ## Backlog
 
