@@ -1,7 +1,6 @@
 ## Spark ML Governance package
 
-This project aims at bringing a key building block that makes
-Spark ML actionable in corporate environment - *model devops and governance*.
+Enabling continuous delivery and improvement of Spark pipeline models in corporate environments through devops methodology and ML governance.
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.aamend.spark/spark-governance/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.aamend.spark/spark-governance)
 [![Build Status](https://travis-ci.org/aamend/spark-governance.svg?branch=master)](https://travis-ci.org/aamend/spark-governance)
@@ -17,14 +16,12 @@ leveraging software delivery tools such as [apache maven](https://maven.apache.o
 
 With a central repository for ML models, machine learning can be constantly retrained and re-injected
 into your operation environment as reported in below HL workflow. 
+One can operate data science under full governance where each
+model is trusted, validated, registered, deployed and continuously improved.
 
 ![ml-flow](images/ml-flow.png)
 
-One can operate data science under full governance where each
-models can be trusted, validated, registered, deployed and continuously improved, 
-useful when applied to lambda architecture and / or online machine learning.
-
-The key concepts are explained below
+Key concepts of this projects are explained below
 - [Model Versioning](#model-versioning)
 - [Model Registry](#model-registry)
 
@@ -36,7 +33,7 @@ Alternatively, jump to usage section
 ### Model Versioning
 
 We propose a naming convention for machine learning models borrowed from standard 
-software delivery principles (maven), in the form of
+software delivery principles (see [docs](https://docs.oracle.com/middleware/1212/core/MAVEN/maven_version.htm)), in the form of
 
 ```
 [groupId]:[artifactId]:[majorVersion].[minorVersion].[buildNumber]
@@ -55,7 +52,7 @@ An example of valid naming convention would be
     `com.organisation:customer-propensity:1.1.0`
     `com.organisation:customer-propensity:2.0.0`
 
-The corresponding maven GAV (**G**roup **A**rtifact **V**ersion) will be as follows
+The corresponding maven dependency can be added to java / scala based project using GAV (**G**roup **A**rtifact **V**ersion) coordinates
 
 ```xml
 <dependency>
@@ -67,26 +64,24 @@ The corresponding maven GAV (**G**roup **A**rtifact **V**ersion) will be as foll
 
 ### Model Registry
 
-We use Nexus as a central model registry (could be artifactory).
-Setting up Nexus is relatively easy and should be a de facto standard in your organisation already. 
-
-A requirement is to have a maven2 release repository created to host versioned pipeline models. 
-Models will be deployed and maintained as per any standard Java dependency.
+We use Nexus as a central model registry.
+Setting up Nexus is relatively easy and should be already be de facto standard in your organisation. 
+Project requires a `maven2` release repository to be created in order to host versioned pipeline models as per any standard Java dependency.
 
 ![ml-registry](images/model_repository.png)
 
 Note that we purposely did not enable `SNAPSHOT` feature of machine learning models as we consider each iteration 
-of a model as an immutable release, hence with version build number increment.
+of a model as an immutable release, hence with a different version build number.
  
 To operate under full governance, it is advised to use multiple repositories (e.g. staging and prod) where only validated
-models (e.g. validated through a QA process) can be promoted from one to another via Nexus built-in functionality (out of scope). 
+models (e.g. validated through a QA process) can be promoted from one to another via Nexus [staging release process](https://help.sonatype.com/repomanager2/staging-releases)
 
 ## Usage
 
-Available as a [spark package](https://spark-packages.org/package/aamend/spark-governance), include this package in your Spark Applications as follows
+Available as a [spark package](https://spark-packages.org/package/aamend/spark-governance), include this package in your Spark Application as follows
 
 ```shell script
-spark-shell --packages com.aamend.spark:spark-governance:latest.release
+$ spark-shell --packages com.aamend.spark:spark-governance:latest.release
 ```
 
 ### Deploy Pipeline
@@ -117,7 +112,7 @@ This process will
 Nexus authentication is enabled by passing an `application.conf` to your spark context as follows
 
 ```shell script
-spark-shell \
+$ spark-shell \
   --files application.conf \
   --driver-java-options -Dconfig.file=application.conf \
   --packages com.aamend.spark:spark-governance:latest.release
@@ -136,7 +131,7 @@ model {
 }
 ```
 
-Note thayt we highly recommend enabling [User Tokens settings on Nexus](https://help.sonatype.com/repomanager3/security/security-setup-with-user-tokens#SecuritySetupwithUserTokens-EnablingandResettingUserTokens) 
+Note that we highly recommend enabling [User Tokens settings on Nexus](https://help.sonatype.com/repomanager3/security/security-setup-with-user-tokens#SecuritySetupwithUserTokens-EnablingandResettingUserTokens) 
 to encrypt username / password. 
 
 Alternatively, one can pass nexus credentials to `deploy` function explicitly
@@ -161,7 +156,7 @@ Note that one needs to pass specific ivy settings to point to their internal Nex
 An example of `ivysettings.xml` can be found [here](examples/ivysettings.xml)
 
 ```shell script
-spark-shell \
+$ spark-shell \
   --conf spark.jars.ivySettings=ivysettings.xml \
   --packages com.aamend.spark:hello-world:latest.release
 ```
