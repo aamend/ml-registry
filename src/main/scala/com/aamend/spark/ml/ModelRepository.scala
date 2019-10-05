@@ -16,6 +16,16 @@ trait ModelRepository {
 
 object ModelRepository {
 
+  def save(pipelineModel: PipelineModel, path: String): Unit = {
+    // Enrich pipeline with location
+    pipelineModel.stages.find(_.isInstanceOf[Watermark]).map(transformer => {
+      transformer.
+        asInstanceOf[Watermark].
+        setWatermark(path)
+    })
+    pipelineModel.save(path)
+  }
+
   def resolve(modelId: String): PipelineModel = {
     val tempDir = Files.createTempDirectory("spark-governance").toFile
     tempDir.deleteOnExit()
@@ -46,9 +56,7 @@ object ModelRepository {
     pipelineModel.stages.find(_.isInstanceOf[Watermark]).map(transformer => {
       transformer.
         asInstanceOf[Watermark].
-        setGroupId(artifact.groupId).
-        setArtifactId(artifact.artifactId).
-        setVersion(version.toString)
+        setWatermark(artifact.toString)
     })
 
     val artifacts = prepare(pipelineModel, artifact.copy(version = version))

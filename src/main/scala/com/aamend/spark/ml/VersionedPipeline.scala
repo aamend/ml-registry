@@ -4,12 +4,11 @@ import org.apache.spark.ml.{Pipeline, PipelineStage}
 
 class VersionedPipeline extends Pipeline with WatermarkParams {
 
-  def setWatermarkColumn(value: String): this.type = set(watermarkColumnParam, value)
-  setDefault(watermarkColumnParam -> watermarkColumnParamDefault)
+  def setWatermarkCol(value: String): this.type = set(watermarkColParam, value)
+  setDefault(watermarkColParam -> "pipeline")
 
   override def setStages(value: Array[_ <: PipelineStage]): VersionedPipeline.this.type = {
-    // Attaching watermark object that will be enriched at model deployment phase
-    val watermark = new Watermark().setWatermarkColumn($(watermarkColumnParam))
+    val watermark = new Watermark().setWatermarkCol($(watermarkColParam))
     super.setStages(value :+ watermark)
   }
 
