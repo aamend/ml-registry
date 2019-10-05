@@ -7,7 +7,7 @@
 
     <groupId>com.aamend.spark</groupId>
     <artifactId>spark-governance</artifactId>
-    <version>3.0</version>
+    <version>4.0</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

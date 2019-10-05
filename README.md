@@ -92,7 +92,7 @@ spark-shell --packages com.aamend.spark:spark-governance:latest.release
 ### Deploy Pipeline
 
 Inspired by the scikit-learn project, spark ML relies on Pipeline to execute machine learning workflows at scale.
-Spark stores binaries in a "crude" way, simply serializing models metadata to a given path (hdfs or s3).
+Spark stores binaries in a "crude" way by serializing model metadata to a given path (hdfs or s3).
 
 ```scala
 val pipeline: Pipeline = new Pipeline().setStages(stages)
@@ -111,7 +111,7 @@ This process will
  
 - Serialize model to disk as per standard ML pipeline `save` function
 - Package pipeline model as a `.jar` file 
-- Works out the relevant build number for artifact `com.aamend.spark:hello-world` given a major and minor version
+- Work out the relevant build number for artifact `com.aamend.spark:hello-world` given a major and minor version
 - Upload model `com.aamend.spark:hello-world:latest` to nexus
 
 Nexus authentication is enabled by passing an `application.conf` to your spark context as follows
@@ -163,15 +163,14 @@ spark-shell \
   --packages com.aamend.spark:hello-world:latest.release
 ```
 
-By specifying `latest.release` instead of specific version, Ivy framework will ensure latest version of our 
+By specifying `latest.release` instead of specific version, Ivy framework will ensure latest version of a 
 model is resolved and loaded, paving the way to online machine learning. 
 Under the hood, we read pipeline metadata from classpath, 
 store binaries to disk and load pipeline model through native spark `load` function.
 
 ```scala
 import com.aamend.spark.ml._
-val model: PipelineModel = ModelRepository.resolve("hello-world")
-model.transform(df)
+val model: PipelineModel = ModelRepository.resolve("com.aamend.spark:hello-world")
 ```
 
 ### Versioned Pipeline
@@ -190,7 +189,7 @@ For each record, we know the exact version of the model used, model available on
 
 ```scala
 import com.aamend.spark.ml._
-val model: PipelineModel = ModelRepository.resolve("hello-world")
+val model: PipelineModel = ModelRepository.resolve("com.aamend.spark:hello-world")
 model.transform(df).select("id", "pipeline").show()
 ```
 

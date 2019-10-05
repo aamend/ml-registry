@@ -26,11 +26,11 @@ object ModelRepository {
     pipelineModel.save(path)
   }
 
-  def resolve(modelId: String): PipelineModel = {
+  def resolve(modelGav: String): PipelineModel = {
     val tempDir = Files.createTempDirectory("spark-governance").toFile
     tempDir.deleteOnExit()
     val tempPipFile = new File(tempDir, "pipeline")
-    extractPipelineFromClasspath(tempPipFile, modelId)
+    extractPipelineFromClasspath(tempPipFile, modelGav.split(":", 2).mkString("/"))
     PipelineModel.load(tempPipFile.toURI.toString)
   }
 
@@ -106,7 +106,7 @@ object ModelRepository {
     val tempPipFile = new File(tempDir, "pipeline-model")
     val tempJarFile = new File(tempDir, "pipeline-model.jar")
     pipelineModel.save(tempPipFile.toURI.toString)
-    packagePipelineJar(tempPipFile, tempJarFile, artifact.artifactId)
+    packagePipelineJar(tempPipFile, tempJarFile, artifact.groupId + "/" + artifact.artifactId)
     tempJarFile
   }
 
