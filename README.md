@@ -1,9 +1,9 @@
-## Spark ML Governance package
+## Spark ML Registry package
 
 Enabling continuous delivery and improvement of Spark pipeline models through devops methodology and ML governance.
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.aamend.spark/spark-governance/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.aamend.spark/spark-governance)
-[![Build Status](https://travis-ci.org/aamend/spark-governance.svg?branch=master)](https://travis-ci.org/aamend/spark-governance)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.aamend.spark/ml-registry/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.aamend.spark/ml-registry)
+[![Build Status](https://travis-ci.org/aamend/ml-registry.svg?branch=master)](https://travis-ci.org/aamend/ml-registry)
 
 ## Principles
 
@@ -78,10 +78,10 @@ models (e.g. validated through a QA process) can be promoted from one another vi
 
 ## Usage
 
-Available as a [spark package](https://spark-packages.org/package/aamend/spark-governance), include this package in your Spark Application as follows
+Available as a [spark package](https://spark-packages.org/package/aamend/ml-registry), include this package in your Spark Application as follows
 
 ```shell script
-$ spark-shell --packages com.aamend.spark:spark-governance:latest.release
+$ spark-shell --packages com.aamend.spark:ml-registry:latest.release
 ```
 
 ### Deploy Pipeline
@@ -115,7 +115,7 @@ Nexus authentication is enabled by passing an `application.conf` to your spark c
 $ spark-shell \
   --files application.conf \
   --driver-java-options -Dconfig.file=application.conf \
-  --packages com.aamend.spark:spark-governance:latest.release
+  --packages com.aamend.spark:ml-registry:latest.release
 ```
 
 Configuration needs to contain the following information. 
@@ -215,7 +215,7 @@ Ideally, this extra information at a record level must serve model monitoring, c
 
 ## Backlog
 
-- serialize models using MLeap to be used outside of a spark context (e.g. Flink)
+- serialize models using [MLeap](https://github.com/combust/mleap) to be used outside of a spark context (e.g. Flink)
 - supporting pyspark pipelines
 - extract data distribution from model input features to be stored on nexus as metadata
 
