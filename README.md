@@ -73,8 +73,8 @@ Project requires a `maven2` release repository to be created in order to host ve
 Note that we purposely did not enable `SNAPSHOT` feature of machine learning models as we consider each iteration 
 of a model as an immutable release, hence with a different version build number.
  
-To operate under full governance, it is advised to use multiple repositories (e.g. staging and prod) where only validated
-models (e.g. validated through a QA process) can be promoted from one to another via Nexus [staging release process](https://help.sonatype.com/repomanager2/staging-releases)
+To operate under full governance, it is advised to use multiple repositories where only validated
+models (e.g. validated through a QA process) can be promoted from one another via Nexus [staging release process](https://help.sonatype.com/repomanager2/staging-releases)
 
 ## Usage
 
@@ -109,7 +109,7 @@ This process will
 - Work out the relevant build number for artifact `com.aamend.spark:hello-world` given a major and minor version
 - Upload model `com.aamend.spark:hello-world:latest` to nexus
 
-Nexus authentication is enabled by passing an `application.conf` to your spark context as follows
+Nexus authentication is enabled by passing an `application.conf` to your spark context or application classpath
 
 ```shell script
 $ spark-shell \
@@ -118,21 +118,20 @@ $ spark-shell \
   --packages com.aamend.spark:spark-governance:latest.release
 ```
 
-or adding `application.conf` in your project classpath. Configuration needs to contain the following information
+Configuration needs to contain the following information. 
+Note that we highly recommend enabling [User Tokens settings on Nexus](https://help.sonatype.com/repomanager3/security/security-setup-with-user-tokens#SecuritySetupwithUserTokens-EnablingandResettingUserTokens) 
+to encrypt username / password. 
 
 ```shell script
 model {
     repository {
-        id: "model-governance"
-        url: "http://localhost:8081/repository/ml-repository/"
+        id: "ml-registry"
+        url: "http://localhost:8081/repository/ml-registry/"
         username: "5gEa1ez2"
         password: "Rl5PpGxICA-vh8-cghkJoq3i3tWAmKJtqgOoYpZqhh-f"
     }
 }
 ```
-
-Note that we highly recommend enabling [User Tokens settings on Nexus](https://help.sonatype.com/repomanager3/security/security-setup-with-user-tokens#SecuritySetupwithUserTokens-EnablingandResettingUserTokens) 
-to encrypt username / password. 
 
 Alternatively, one can pass nexus credentials to `deploy` function explicitly
 
@@ -141,8 +140,8 @@ import com.aamend.spark.ml._
 ModelRepository.deploy(
   model = model,
   gav = "com.aamend.spark:hello-world:1.0",
-  repoId = "model-governance",
-  repoURL = "http://localhost:8081/nexus/content/repositories/model-governance/",
+  repoId = "ml-registry",
+  repoURL = "http://localhost:8081/repository/ml-registry/",
   repoUsername = "5gEa1ez2",
   repoPassword = "Rl5PpGxICA-vh8-cghkJoq3i3tWAmKJtqgOoYpZqhh-f"
 )
@@ -177,8 +176,8 @@ val model: PipelineModel = ModelRepository.resolve("com.aamend.spark:hello-world
 
 ### Versioned Pipeline
 
-In order to guarantee model reproducibility, we enabled a new type of pipeline `VersionedPipeline` that appends a 
-schema with pipeline version as published to nexus.
+In order to guarantee model reproducibility, we have introduced `VersionedPipeline`, a new type of pipeline object 
+that appends model version as published to nexus. 
 
 ```scala
 import com.aamend.spark.ml._
@@ -187,13 +186,15 @@ val model: PipelineModel = pipeline.fit(df)
 ModelRepository.deploy(model, "com.aamend.spark:hello-world:1.0")
 ```
 
-For each record, we know the exact version of the model used, model available on nexus. 
+Schema is attached to pipeline object and enriched at deployment time with corresponding maven version
 
 ```scala
 import com.aamend.spark.ml._
 val model: PipelineModel = ModelRepository.resolve("com.aamend.spark:hello-world")
 model.transform(df).select("id", "pipeline").show()
 ```
+
+For each record, we know the exact version of the model used. 
 
 ```
 +---+----------------------------------+
@@ -206,9 +207,11 @@ model.transform(df).select("id", "pipeline").show()
 +---+----------------------------------+
 ```
 
-Ideally, this extra information at a record level will serve for model monitoring. 
-As a data scientist, you may want to be informed whenever performance of your model degrade so that you can
-retrain a new model and deploy via the above methodology.
+Ideally, this extra information at a record level must serve model monitoring, covering below user stories
+
+|**As a**| data scientist|
+|**I want to** |be informed whenever performance of my model degrade|
+|**so that**| I can retrain a new model and deploy via the above methodology|
 
 ## Backlog
 
