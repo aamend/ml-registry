@@ -15,9 +15,6 @@ leveraging software delivery tools such as [apache maven](https://maven.apache.o
 With a central repository for ML models, machine learning can be constantly retrained and re-injected
 into your operation environment as reported in below HL workflow. 
 
-Note that it is common for companies to have different environments between exploration, testing and operation. 
-It is therefore critical to have a central repository for ML models.
-
 ![ml-flow](ml-flow.png)
 
 One can operate data science under full governance where each
@@ -25,15 +22,15 @@ models can be trusted, validated, registered, deployed and continuously improved
 useful when applied to lambda architecture and / or online machine learning.
 
 The key concepts are explained below
-- [Maven Versioning](#maven-versioning)
+- [Model Versioning](#model-versioning)
 - [Model Registry](#model-registry)
 
 Alternatively, jump to usage section
 - [Pipeline Deployment](#deploy-pipeline)
 - [Pipeline Resolution](#resolve-pipeline)
-- [Pipeline Versioning](#versioned-pipeline)
+- [Pipeline Watermark](#versioned-pipeline)
 
-### Maven Versioning
+### Model Versioning
 
 We propose a naming convention for machine learning models borrowed from standard 
 software delivery principles (maven), in the form of
