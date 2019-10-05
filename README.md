@@ -3,7 +3,6 @@
 Enabling continuous delivery and improvement of Spark pipeline models through devops methodology and ML governance.
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.aamend.spark/ml-registry/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.aamend.spark/ml-registry)
-[![Build Status](https://travis-ci.org/aamend/ml-registry.svg?branch=master)](https://travis-ci.org/aamend/ml-registry)
 
 ## Principles
 
