@@ -7,10 +7,12 @@
     <credentials host="${repo.host}" realm="${repo.realm}" username="${repo.user}" passwd="${repo.pass}"/>
     <resolvers>
         <ibiblio name="maven-central" root="https://repo1.maven.org/maven2/" m2compatible="true" />
+        <ibiblio name="oss-releases" root="https://oss.sonatype.org/content/repositories/releases" m2compatible="true" />
         <ibiblio name="oss-snapshots" root="https://oss.sonatype.org/content/repositories/snapshots" m2compatible="true" />
         <ibiblio name="ml-registry" root="http://localhost:8081/repository/ml-registry/" m2compatible="true" />
         <chain name="local-chain">
             <resolver ref="maven-central"/>
+            <resolver ref="oss-releases"/>
             <resolver ref="oss-snapshots"/>
             <resolver ref="ml-registry"/>
         </chain>
