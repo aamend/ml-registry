@@ -1,6 +1,6 @@
 ## Spark ML Governance package
 
-Enabling continuous delivery and improvement of Spark pipeline models in corporate environments through devops methodology and ML governance.
+Enabling continuous delivery and improvement of Spark pipeline models through devops methodology and ML governance.
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.aamend.spark/spark-governance/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.aamend.spark/spark-governance)
 [![Build Status](https://travis-ci.org/aamend/spark-governance.svg?branch=master)](https://travis-ci.org/aamend/spark-governance)
