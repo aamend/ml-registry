@@ -3,28 +3,18 @@ package com.aamend.spark.ml
 import java.io.{BufferedWriter, File, FileWriter}
 import java.nio.file.Files
 
-import com.aamend.spark.ml.maven.{Artifact, ModelRepositoryImpl, Version}
+import com.aamend.spark.ml.maven.{Artifact, NexusMLRegistry, Version}
 import com.aamend.spark.ml.io._
 import org.apache.spark.ml.PipelineModel
 
 import scala.io.Source
 
-trait ModelRepository {
+trait MLRegistry {
   def getNextVersion(artifact: Artifact): Version
   def deploy(artifacts: List[Artifact]): Unit
 }
 
-object ModelRepository {
-
-  def save(pipelineModel: PipelineModel, path: String): Unit = {
-    // Enrich pipeline with location
-    pipelineModel.stages.find(_.isInstanceOf[Watermark]).map(transformer => {
-      transformer.
-        asInstanceOf[Watermark].
-        setWatermark(path)
-    })
-    pipelineModel.save(path)
-  }
+object MLRegistry {
 
   def resolve(modelGav: String): PipelineModel = {
     val tempDir = Files.createTempDirectory("spark-governance").toFile
@@ -36,18 +26,18 @@ object ModelRepository {
   }
 
   def deploy(pipelineModel: PipelineModel, modelGav: String): String = {
-    val repository = ModelRepositoryImpl()
+    val repository = NexusMLRegistry()
     deploy(pipelineModel, modelGav, repository)
   }
 
   def deploy(pipelineModel: PipelineModel, modelGav: String, repoId: String, repoUrl: String, repoUsername: String, repoPassword: String): String = {
-    val repository = ModelRepositoryImpl(repoId, repoUrl, repoUsername, repoPassword)
+    val repository = NexusMLRegistry(repoId, repoUrl, repoUsername, repoPassword)
     deploy(pipelineModel, modelGav, repository)
   }
 
   private def deploy(pipelineModel: PipelineModel,
              modelGav: String,
-             repository: ModelRepository
+             repository: MLRegistry
             ) = {
 
     val artifact = Artifact(modelGav)
@@ -79,7 +69,7 @@ object ModelRepository {
 
   private def getNextVersion(
                               artifact: Artifact,
-                              nexus: ModelRepository
+                              nexus: MLRegistry
                             ): Version = {
 
     artifact.version.buildNumber match {

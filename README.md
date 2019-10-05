@@ -98,7 +98,7 @@ We propose the following changes
 
 ```scala
 import com.aamend.spark.ml._
-ModelRepository.deploy(model, "com.aamend.spark:hello-world:1.0")
+MLRegistry.deploy(model, "com.aamend.spark:hello-world:1.0")
 ```
 
 This process will
@@ -136,7 +136,7 @@ Alternatively, one can pass nexus credentials to `deploy` function explicitly
 
 ```scala
 import com.aamend.spark.ml._
-ModelRepository.deploy(
+MLRegistry.deploy(
   model = model,
   gav = "com.aamend.spark:hello-world:1.0",
   repoId = "ml-registry",
@@ -170,7 +170,7 @@ store binaries to disk and load pipeline model through native spark `load` funct
 
 ```scala
 import com.aamend.spark.ml._
-val model: PipelineModel = ModelRepository.resolve("com.aamend.spark:hello-world")
+val model: PipelineModel = MLRegistry.resolve("com.aamend.spark:hello-world")
 ```
 
 ### Versioned Pipeline
@@ -182,14 +182,14 @@ that appends model version as published to nexus.
 import com.aamend.spark.ml._
 val pipeline: Pipeline = new VersionedPipeline().setWatermarkCol("pipeline").setStages(stages)
 val model: PipelineModel = pipeline.fit(df)
-ModelRepository.deploy(model, "com.aamend.spark:hello-world:1.0")
+MLRegistry.deploy(model, "com.aamend.spark:hello-world:1.0")
 ```
 
 Schema is attached to pipeline object and enriched at deployment time with corresponding maven version
 
 ```scala
 import com.aamend.spark.ml._
-val model: PipelineModel = ModelRepository.resolve("com.aamend.spark:hello-world")
+val model: PipelineModel = MLRegistry.resolve("com.aamend.spark:hello-world")
 model.transform(df).select("id", "pipeline").show()
 ```
 

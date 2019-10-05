@@ -3,7 +3,7 @@ package com.aamend.spark.ml.maven
 import java.io.File
 import java.nio.file.Files
 
-import com.aamend.spark.ml.ModelRepository
+import com.aamend.spark.ml.MLRegistry
 import com.typesafe.config.{Config, ConfigFactory}
 import org.apache.maven.repository.internal._
 import org.eclipse.aether.artifact.DefaultArtifact
@@ -22,7 +22,7 @@ import org.eclipse.aether.{DefaultRepositorySystemSession, RepositorySystem}
 import scala.collection.JavaConversions._
 import scala.util.{Success, Try}
 
-object ModelRepositoryImpl {
+object NexusMLRegistry {
 
   val config: Config = ConfigFactory.load()
   val repoId: Option[String] = Try(config.getString("model.repository.id")).toOption
@@ -37,31 +37,33 @@ object ModelRepositoryImpl {
    * - model.repository.url: the model repository url
    * - model.repository.username: the model repository username
    * - model.repository.password: the plain text repository password
-   * @return an instance of [[ModelRepositoryImpl]]
+   *
+   * @return an instance of [[NexusMLRegistry]]
    */
-  def apply(): ModelRepositoryImpl = {
+  def apply(): NexusMLRegistry = {
     require(repoId.isDefined, "Model repository Id must be defined in [application.conf]")
     require(repoUrl.isDefined, "Model repository Url must be defined in [application.conf]")
     require(repoUsername.isDefined, "Model repository Username must be defined in [application.conf]")
     require(repoPassword.isDefined, "Model repository Password must be defined in [application.conf]")
-    new ModelRepositoryImpl(repoId.get, repoUrl.get, repoUsername.get, repoPassword.get)
+    new NexusMLRegistry(repoId.get, repoUrl.get, repoUsername.get, repoPassword.get)
   }
 
   /**
    * Create a new Model repository instance where connection details are provided
+   *
    * @param repoId the model repository Id
    * @param repoUrl the model repository url
    * @param repoUsername the model repository username
    * @param repoPassword the plain text repository password
-   * @return an instance of [[ModelRepositoryImpl]]
+   * @return an instance of [[NexusMLRegistry]]
    */
-  def apply(repoId: String, repoUrl: String, repoUsername: String, repoPassword: String): ModelRepositoryImpl = {
-    new ModelRepositoryImpl(repoId, repoUrl, repoUsername, repoPassword)
+  def apply(repoId: String, repoUrl: String, repoUsername: String, repoPassword: String): NexusMLRegistry = {
+    new NexusMLRegistry(repoId, repoUrl, repoUsername, repoPassword)
   }
 
 }
 
-class ModelRepositoryImpl(repoId: String, repoUrl: String, repoUsername: String, repoPassword: String) extends ModelRepository {
+class NexusMLRegistry(repoId: String, repoUrl: String, repoUsername: String, repoPassword: String) extends MLRegistry {
 
   val localRepoTemp: File = Files.createTempDirectory("pipeline").toFile
   localRepoTemp.deleteOnExit()
