@@ -64,8 +64,8 @@ The corresponding maven dependency can be added to java / scala based project us
 
 ### Model Registry
 
-We use Nexus as a central model registry.
-Setting up Nexus is relatively easy and should already be de facto standard in your organisation. 
+We use nexus as a central model registry.
+Setting up nexus is relatively easy and should already be de facto standard in your organisation. 
 Project requires a `maven2` release repository to be created in order to host versioned pipeline models as per any standard Java dependency.
 
 ![ml-registry](images/ml-registry.png)
@@ -74,7 +74,7 @@ Note that we purposely did not enable `SNAPSHOT` feature of machine learning mod
 of a model as an immutable release, hence with a different version build number.
  
 To operate under full governance, it is advised to use multiple repositories where only validated
-models (e.g. validated through a QA process) can be promoted from one another via Nexus [staging release process](https://help.sonatype.com/repomanager2/staging-releases)
+models (e.g. validated through a QA process) can be promoted from one another via nexus [staging release process](https://help.sonatype.com/repomanager2/staging-releases)
 
 ## Usage
 
@@ -119,7 +119,7 @@ $ spark-shell \
 ```
 
 Configuration needs to contain the following information. 
-Note that we highly recommend enabling [User Tokens settings on Nexus](https://help.sonatype.com/repomanager3/security/security-setup-with-user-tokens#SecuritySetupwithUserTokens-EnablingandResettingUserTokens) 
+Note that we highly recommend enabling [user tokens settings on nexus](https://help.sonatype.com/repomanager3/security/security-setup-with-user-tokens#SecuritySetupwithUserTokens-EnablingandResettingUserTokens) 
 to encrypt username / password. 
 
 ```shell script
@@ -147,7 +147,7 @@ ModelRepository.deploy(
 )
 ```
 
-Resulting artifact will be released to Nexus and - as such - considered as immutable across multiple environments.
+Resulting artifact will be released to nexus and - as such - considered as immutable across multiple environments.
 
 ![ml-version](images/model-versioned.png)
 
@@ -155,7 +155,7 @@ Resulting artifact will be released to Nexus and - as such - considered as immut
 
 Given that we consider each pipeline model as a standard maven dependency available on nexus, 
 we can leverage Spark Ivy functionality (through `--packages`) to inject our model as a dependency to a spark context. 
-Note that one needs to pass specific ivy settings to point to their internal Nexus repository. 
+Note that one needs to pass specific ivy settings to point to their internal nexus repository. 
 An example of `ivysettings.xml` can be found [here](examples/ivysettings.xml)
 
 ```shell script
@@ -216,6 +216,7 @@ Ideally, this extra information at a record level must serve model monitoring, c
 ## Backlog
 
 - serialize models using MLeap to be used outside of a spark context (e.g. Flink)
+- supporting pyspark pipelines
 - extract data distribution from model input features to be stored on nexus as metadata
 
 ## Install
