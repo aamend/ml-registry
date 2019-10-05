@@ -25,15 +25,15 @@ models can be trusted, validated, registered, deployed and continuously improved
 useful when applied to lambda architecture and / or online machine learning.
 
 The key concepts are explained below
-- [Maven Versioning](###maven-versioning)
-- [Model Registry](###model-registry)
+- [Maven Versioning](#maven-versioning)
+- [Model Registry](#model-registry)
 
 Alternatively, jump to usage section
-- [Pipeline Deployment](###deploy-pipeline)
-- [Pipeline Resolution](###resolve-pipeline)
-- [Pipeline Versioning](###versioned-pipeline)
+- [Pipeline Deployment](#deploy-pipeline)
+- [Pipeline Resolution](#resolve-pipeline)
+- [Pipeline Versioning](#versioned-pipeline)
 
-###Maven Versioning
+### Maven Versioning
 
 We propose a naming convention for machine learning models borrowed from standard 
 software delivery principles (maven), in the form of
@@ -65,7 +65,7 @@ The corresponding maven GAV (**G**roup **A**rtifact **V**ersion) will be as foll
 </dependency>
 ```
 
-###Model Registry
+### Model Registry
 
 We use Nexus as a central model registry (could be artifactory).
 Setting up Nexus is relatively easy and should be a de facto standard in your organisation already. 
@@ -89,7 +89,7 @@ Using this project in your spark environment
 spark-shell --packages com.aamend.spark:spark-governance:latest.release
 ```
 
-###Deploy Pipeline
+### Deploy Pipeline
 
 Inspired by the scikit-learn project, spark ML relies on Pipeline to execute machine learning workflows at scale.
 Spark stores binaries in a "crude" way, simply serializing models metadata to a given path (hdfs or s3).
@@ -124,7 +124,6 @@ spark-shell \
 ```
 
 or adding `application.conf` in your project classpath. 
-Configuration is as follows
 
 ```shell script
 model {
@@ -137,7 +136,7 @@ model {
 }
 ```
 
-Alternatively, we can pass nexus credentials to our `deploy` function explicitly
+Alternatively, one can pass nexus credentials to their `deploy` function explicitly
 
 ```scala
 import com.aamend.spark.ml._
@@ -151,7 +150,7 @@ ModelRepository.deploy(
 )
 ```
 
-###Resolve Pipeline
+### Resolve Pipeline
 
 Given that we consider each pipeline model as a standard maven dependency available on nexus, 
 we can leverage Spark Ivy functionality (through `--packages`) to inject our model as a dependency to a spark context. 
@@ -175,7 +174,7 @@ val model: PipelineModel = ModelRepository.resolve("hello-world")
 model.transform(df)
 ```
 
-###Versioned Pipeline
+### Versioned Pipeline
 
 In order to guarantee model reproducibility, we enabled a new type of pipeline `VersionedPipeline` that appends a 
 schema with pipeline version as published to nexus.
