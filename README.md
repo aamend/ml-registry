@@ -18,7 +18,7 @@ leveraging software delivery tools such as [apache maven](https://maven.apache.o
 With a central repository for ML models, machine learning can be constantly retrained and re-injected
 into your operation environment as reported in below HL workflow. 
 
-![ml-flow](ml-flow.png)
+![ml-flow](images/ml-flow.png)
 
 One can operate data science under full governance where each
 models can be trusted, validated, registered, deployed and continuously improved, 
@@ -73,7 +73,7 @@ Setting up Nexus is relatively easy and should be a de facto standard in your or
 A requirement is to have a maven2 release repository created to host versioned pipeline models. 
 Models will be deployed and maintained as per any standard Java dependency.
 
-![ml-registry](model_repository.png)
+![ml-registry](images/model_repository.png)
 
 Note that we purposely did not enable `SNAPSHOT` feature of machine learning models as we consider each iteration 
 of a model as an immutable release, hence with version build number increment.
@@ -158,7 +158,7 @@ ModelRepository.deploy(
 Given that we consider each pipeline model as a standard maven dependency available on nexus, 
 we can leverage Spark Ivy functionality (through `--packages`) to inject our model as a dependency to a spark context. 
 Note that one needs to pass specific ivy settings to point to their internal Nexus repository. 
-An example of `ivysettings.xml` can be found [here](ivysettings.xml)
+An example of `ivysettings.xml` can be found [here](examples/ivysettings.xml)
 
 ```shell script
 spark-shell \
