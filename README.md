@@ -65,10 +65,10 @@ The corresponding maven dependency can be added to java / scala based project us
 ### Model Registry
 
 We use Nexus as a central model registry.
-Setting up Nexus is relatively easy and should be already be de facto standard in your organisation. 
+Setting up Nexus is relatively easy and should already be de facto standard in your organisation. 
 Project requires a `maven2` release repository to be created in order to host versioned pipeline models as per any standard Java dependency.
 
-![ml-registry](images/model_repository.png)
+![ml-registry](images/ml-registry.png)
 
 Note that we purposely did not enable `SNAPSHOT` feature of machine learning models as we consider each iteration 
 of a model as an immutable release, hence with a different version build number.
@@ -147,6 +147,10 @@ ModelRepository.deploy(
   repoPassword = "Rl5PpGxICA-vh8-cghkJoq3i3tWAmKJtqgOoYpZqhh-f"
 )
 ```
+
+Resulting artifact will be released to Nexus and - as such - considered as immutable across multiple environments.
+
+![ml-version](images/model-versioned.png)
 
 ### Resolve Pipeline
 
