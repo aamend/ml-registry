@@ -46,10 +46,12 @@ software delivery principles (see [docs](https://docs.oracle.com/middleware/1212
 
 An example of valid naming convention would be
 
-    `com.organisation:customer-propensity:1.0.0`
-    `com.organisation:customer-propensity:1.0.1`
-    `com.organisation:customer-propensity:1.1.0`
-    `com.organisation:customer-propensity:2.0.0`
+```
+    com.organisation:customer-propensity:1.0.0
+    com.organisation:customer-propensity:1.0.1
+    com.organisation:customer-propensity:1.1.0
+    com.organisation:customer-propensity:2.0.0
+```
 
 The corresponding maven dependency can be added to java / scala based project using GAV (**G**roup **A**rtifact **V**ersion) coordinates
 
