@@ -176,6 +176,8 @@ import com.aamend.spark.ml._
 val model: PipelineModel = MLRegistry.resolve("com.aamend.spark:hello-world")
 ```
 
+Note that you do not need to add this specific project `com.aamend.spark:ml-registry` at runtime since it has been added to your model `pom.xml` specs, hence will be resolved as a transitive dependency - magic!
+
 ### Versioned Pipeline
 
 In order to guarantee model reproducibility, we have introduced `VersionedPipeline`, a new type of pipeline object 
@@ -214,6 +216,8 @@ Ideally, this extra information at a record level must serve model monitoring, c
 + **As a** data scientist
 + **I want to** be informed whenever performance of my model degrade
 + **so that** I can retrain a new model and deploy via the above methodology
+
+Note that this also pave the way to *champion/challenger* model approach where 2 versions of a model would be running concurrently and monitored simultaneously.
 
 ## Backlog
 
