@@ -101,7 +101,7 @@ We propose the following changes
 
 ```scala
 import com.aamend.spark.ml._
-MLRegistry.deploy(model, "com.aamend.spark:hello-world:1.0")
+model.deploy("com.aamend.spark:hello-world:1.0")
 ```
 
 This process will
