@@ -225,9 +225,8 @@ Note that this also pave the way to *champion/challenger* model approach where 2
 
 ## Backlog
 
-- serialize models using [MLeap](https://github.com/combust/mleap) to be used outside of a spark context (e.g. Flink)
-- supporting pyspark pipelines
-- extract data distribution from model input features to be stored on nexus as metadata
+- serialize models using [MLeap](https://github.com/combust/mleap) to be used outside of a spark context
+- ability to publish model metrics
 
 ## Install
 
