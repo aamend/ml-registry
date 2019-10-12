@@ -33,7 +33,7 @@ case class Artifact(
     require(file.exists && file.isFile)
     this.copy(
       file = Some(file),
-      classifier = Some(""),
+      classifier = Some(getClassifier(file)),
       extension = Some(getExtension(file))
     )
   }
@@ -62,17 +62,30 @@ case class Artifact(
 
   }
 
+  private def getClassifier(file: File): String = {
+    file.getName match {
+      case Artifact.pomFile => ""
+      case Artifact.metadataFile => "metadata"
+      case x if x.endsWith(".jar") => ""
+      case _ => throw new IllegalArgumentException(s"File must be [jar], [pom.xml] or [metadata.xml]")
+    }
+  }
+
   private def getExtension(file: File): String = {
     file.getName match {
-      case "pom.xml" => "pom"
+      case Artifact.pomFile => "pom"
+      case Artifact.metadataFile => "xml"
       case x if x.endsWith(".jar") => "jar"
-      case _ => throw new IllegalArgumentException(s"File must be [jar] or [pom.xml]")
+      case _ => throw new IllegalArgumentException(s"File must be [jar], [pom.xml] or [metadata.xml]")
     }
   }
 
 }
 
 object Artifact {
+
+  val metadataFile = "metadata.xml"
+  val pomFile = "pom.xml"
 
   /**
    * Maven coordinates use the following values: groupId, artifactId, version (GAV).
