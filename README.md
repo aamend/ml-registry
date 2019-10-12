@@ -153,6 +153,10 @@ Resulting artifact will be released to nexus and - as such - considered as immut
 
 ![ml-version](images/model-versioned.png)
 
+We also extract all parameters used across ML pipeline and report those as part of artifact metadata on nexus
+
+![ml-metadata](images/model-metadata.png)
+
 ### Resolve Pipeline
 
 Given that we consider each pipeline model as a standard maven dependency available on nexus, 
