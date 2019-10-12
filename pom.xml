@@ -5,7 +5,7 @@
 
     <groupId>com.aamend.spark</groupId>
     <artifactId>ml-registry</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.1</version>
 
     <name>Spark ML Registry</name>
     <inceptionYear>2019</inceptionYear>
@@ -29,7 +29,7 @@
     <scm>
         <url>https://github.com/aamend/ml-registry</url>
         <connection>scm:git:git@github.com:aamend/ml-registry.git</connection>
-        <tag>ml-registry</tag>
+        <tag>ml-registry-1.1</tag>
     </scm>
 
     <developers>
