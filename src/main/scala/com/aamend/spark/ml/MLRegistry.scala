@@ -63,9 +63,15 @@ object MLRegistry {
 
     val tempDir = Files.createTempDirectory("spark-governance").toFile
     tempDir.deleteOnExit()
+
+    // Extract pipeline parameters as part of nexus metadata
+    val xmlFile = new File(tempDir, Artifact.metadataFile)
+    scala.xml.XML.save(xmlFile.toString, pipelineModel.extractMetadata.toXml)
+
     val pom = artifact.addFile(preparePom(artifact, tempDir))
     val jar = artifact.addFile(preparePipelineModel(pipelineModel, artifact, tempDir))
-    List(pom, jar)
+    val met = artifact.addFile(xmlFile)
+    List(pom, jar, met)
   }
 
   private def getNextVersion(
@@ -81,7 +87,7 @@ object MLRegistry {
 
   private def preparePom(artifact: Artifact, tempDir: File): File = {
 
-    val tempPomFile = new File(tempDir, "pom.xml")
+    val tempPomFile = new File(tempDir, Artifact.pomFile)
     val pomStr = Source.
       fromInputStream(this.getClass.getResourceAsStream("/pom.xml")).
       getLines().
