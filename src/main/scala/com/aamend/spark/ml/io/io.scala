@@ -46,6 +46,7 @@ package object io {
     List("metadata", "stages").flatMap(path => {
       val loader = Thread.currentThread().getContextClassLoader
       val url = loader.getResource(s"$rootDir/$path")
+      require(url != null, s"Could not load model [${rootDir.split(File.separator).last}] from classpath")
       val jarPath = url.getPath.substring(5, url.getPath.indexOf("!")) //strip out only the JAR file
       val jar = new JarFile(URLDecoder.decode(jarPath, "UTF-8"))
       val entries = jar.entries

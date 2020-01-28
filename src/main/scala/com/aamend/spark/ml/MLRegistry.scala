@@ -16,7 +16,7 @@ trait MLRegistry {
 
 object MLRegistry {
 
-  def resolve(modelGav: String): PipelineModel = {
+  def resolve(modelArtifactId: String): PipelineModel = {
 
     // pipeline will be exported from classpath to local disk
     val tempDir = Files.createTempDirectory("spark-governance").toFile
@@ -24,7 +24,7 @@ object MLRegistry {
     tempDir.deleteOnExit()
 
     // Extract pipeline to local disk
-    val rootPath = getClassPathFolder(modelGav)
+    val rootPath = getClassPathFolder(modelArtifactId)
     extractPipelineFromClasspath(tempPipFile, rootPath)
 
     // Load pipeline from local disk
