@@ -20,3 +20,4 @@ val lr = new LogisticRegression().setMaxIter(10).setRegParam(0.001)
 val pipeline = new VersionedPipeline().setWatermarkCol("pipeline").setStages(Array(tokenizer, hashingTF, lr))
 val model = pipeline.fit(training)
 MLRegistry.deploy(model, "com.aamend.spark:hello-world:1.0")
+

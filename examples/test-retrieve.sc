@@ -9,5 +9,5 @@ import com.aamend.spark.ml.MLRegistry
 
 val spark = SparkSession.builder().getOrCreate()
 val testing = spark.createDataFrame(Seq((4L, "spark"), (5L, "jenkins"), (6L, "nexus"), (7L, "hadoop"))).toDF("id", "text")
-val model = MLRegistry.resolve("com.aamend.spark:hello-world")
+val model = MLRegistry.resolve("hello-world")
 model.transform(testing).select("id", "text", "pipeline").show(10, truncate = false)

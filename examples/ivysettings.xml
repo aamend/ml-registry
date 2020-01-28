@@ -6,14 +6,12 @@
     <property name="repo.pass" value="Rl5PpGxICA-vh8-cghkJoq3i3tWAmKJtqgOoYpZqhh-f"  override="false"/>
     <credentials host="${repo.host}" realm="${repo.realm}" username="${repo.user}" passwd="${repo.pass}"/>
     <resolvers>
-        <ibiblio name="maven-central" root="https://repo1.maven.org/maven2/" m2compatible="true" />
-        <ibiblio name="oss-releases" root="https://oss.sonatype.org/content/repositories/releases" m2compatible="true" />
-        <ibiblio name="oss-snapshots" root="https://oss.sonatype.org/content/repositories/snapshots" m2compatible="true" />
-        <ibiblio name="ml-registry" root="http://localhost:8081/repository/ml-registry/" m2compatible="true" />
+        <ibiblio name="local-releases" root="http://localhost:8081/nexus/content/repositories/releases/" m2compatible="true" />
+        <ibiblio name="local-snapshots" root="http://localhost:8081/nexus/content/repositories/snapshots/" m2compatible="true" />
+        <ibiblio name="ml-registry" root="http://localhost:8081/nexus/content/repositories/ml-registry/" m2compatible="true" />
         <chain name="local-chain">
-            <resolver ref="maven-central"/>
-            <resolver ref="oss-releases"/>
-            <resolver ref="oss-snapshots"/>
+            <resolver ref="local-releases"/>
+            <resolver ref="local-snapshots"/>
             <resolver ref="ml-registry"/>
         </chain>
     </resolvers>

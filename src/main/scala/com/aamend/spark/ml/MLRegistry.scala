@@ -17,11 +17,17 @@ trait MLRegistry {
 object MLRegistry {
 
   def resolve(modelGav: String): PipelineModel = {
+
+    // pipeline will be exported from classpath to local disk
     val tempDir = Files.createTempDirectory("spark-governance").toFile
-    tempDir.deleteOnExit()
     val tempPipFile = new File(tempDir, "pipeline")
-    val rootPath = gavToClasspathFolder(modelGav)
+    tempDir.deleteOnExit()
+
+    // Extract pipeline to local disk
+    val rootPath = getClassPathFolder(modelGav)
     extractPipelineFromClasspath(tempPipFile, rootPath)
+
+    // Load pipeline from local disk
     PipelineModel.load(tempPipFile.toURI.toString)
   }
 
@@ -41,19 +47,27 @@ object MLRegistry {
             ): String = {
 
     val artifact = Artifact(modelGav)
+
+    // Retrieve latest available version on Nexus
     val version = getNextVersion(artifact, repository)
     val newArtifact = artifact.copy(version = version)
 
-    // Enrich pipeline with version number
+    // Enrich pipeline with version number - if versioned pipeline
     pipelineModel.stages.find(_.isInstanceOf[Watermark]).map(transformer => {
       transformer.
         asInstanceOf[Watermark].
         setWatermark(newArtifact.toString)
     })
 
+    // Package artifacts
     val artifacts = prepare(pipelineModel, newArtifact)
+
+    // Deploy pipeline model to nexus
     repository.deploy(artifacts)
+
+    // Return updated version
     artifacts.head.toString
+
   }
 
   private def prepare(
@@ -61,17 +75,22 @@ object MLRegistry {
                        artifact: Artifact
                      ): List[Artifact] = {
 
+    // Storing pipeline on local disk (temp folder)
     val tempDir = Files.createTempDirectory("spark-governance").toFile
     tempDir.deleteOnExit()
 
-    // Extract pipeline parameters as part of nexus metadata
+    // Extract pipeline parameters
     val xmlFile = new File(tempDir, Artifact.metadataFile)
     scala.xml.XML.save(xmlFile.toString, pipelineModel.extractMetadata.toXml)
 
-    val pom = artifact.addFile(preparePom(artifact, tempDir))
-    val jar = artifact.addFile(preparePipelineModel(pipelineModel, artifact, tempDir))
-    val met = artifact.addFile(xmlFile)
-    List(pom, jar, met)
+    List(
+      // Create POM file containing model specs
+      artifact.addFile(preparePom(artifact, tempDir)),
+      // Create JAR file containing model binaries
+      artifact.addFile(preparePipelineModel(pipelineModel, artifact, tempDir)),
+      // Create METADATA file containing model hyper parameters
+      artifact.addFile(xmlFile)
+    )
   }
 
   private def getNextVersion(
@@ -104,16 +123,8 @@ object MLRegistry {
     val tempPipFile = new File(tempDir, "pipeline-model")
     val tempJarFile = new File(tempDir, "pipeline-model.jar")
     pipelineModel.save(tempPipFile.toURI.toString)
-    packagePipelineJar(tempPipFile, tempJarFile, gavToClasspathFolder(artifact.toString))
+    packagePipelineJar(tempPipFile, tempJarFile, getClassPathFolder(artifact.artifactId))
     tempJarFile
   }
-
-  private def gavToClasspathFolder(gav: String) = {
-    gav.split(":").take(2) match {
-      case Array(groupId, artifactId) => (groupId.split("\\.") :+ artifactId).mkString("/")
-      case _ => throw new IllegalArgumentException("modelGav must be of format [groupId:artifactId]")
-    }
-  }
-
 
 }

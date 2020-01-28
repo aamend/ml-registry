@@ -11,6 +11,12 @@ import scala.annotation.tailrec
 
 package object io {
 
+  final val ROOT_PATH = "pipelines"
+
+  def getClassPathFolder(artifactId: String): String = {
+    ROOT_PATH + File.separator + artifactId
+  }
+
   /**
    * Read content of a pipeline model stored on local FS and write a Jar file where model can be added to application classpath
    * @param inputPath pipeline model location on local FS
@@ -54,7 +60,7 @@ package object io {
   }
 
   private def _createJarFile(jos: JarOutputStream, file: File, rootDir: String): Unit = {
-    val name = rootDir + "/" + file.getName
+    val name = rootDir + File.separator + file.getName
     if (file.isFile) {
       val jarEntry = new JarEntry(name)
       jarEntry.setTime(file.lastModified())

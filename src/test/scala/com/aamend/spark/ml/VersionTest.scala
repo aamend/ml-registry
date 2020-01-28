@@ -16,6 +16,7 @@ class VersionTest extends FlatSpec with Matchers {
     v.majorVersion should be(1)
     v.minorVersion should be(1)
     v.buildNumber should be(Some(1))
+    v.toString should be("1.1.1")
   }
 
   it should "be incremented" in {
@@ -38,6 +39,7 @@ class VersionTest extends FlatSpec with Matchers {
     v.majorVersion should be(1)
     v.minorVersion should be(1)
     v.buildNumber should be(None)
+    v.toString should be("1.1.x")
   }
 
   "Version without minor and build" should "be retrieved from string" in {
@@ -46,6 +48,7 @@ class VersionTest extends FlatSpec with Matchers {
     v.majorVersion should be(1)
     v.minorVersion should be(0)
     v.buildNumber should be(None)
+    v.toString should be("1.0.x")
   }
 
 }

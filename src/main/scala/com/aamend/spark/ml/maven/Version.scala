@@ -28,7 +28,7 @@ case class Version(
     )
   }
 
-  override def toString: String = s"$majorVersion.$minorVersion.${buildNumber.getOrElse(0)}"
+  override def toString: String = s"$majorVersion.$minorVersion.${buildNumber.getOrElse("x")}"
 
   /**
    * If build number is provided, we increment. If not, we define it as 0.
