@@ -177,7 +177,7 @@ store binaries to disk and load pipeline model through native spark `load` funct
 
 ```scala
 import com.aamend.spark.ml._
-val model: PipelineModel = MLRegistry.resolve("com.aamend.spark:hello-world")
+val model: PipelineModel = MLRegistry.resolve("hello-world")
 ```
 
 Note that you do not need to add this specific project `com.aamend.spark:ml-registry` at runtime since it has been added to your model `pom.xml` specs, hence will be resolved as a transitive dependency - magic!
@@ -198,7 +198,7 @@ Schema is attached to pipeline object and enriched at deployment time with corre
 
 ```scala
 import com.aamend.spark.ml._
-val model: PipelineModel = MLRegistry.resolve("com.aamend.spark:hello-world")
+val model: PipelineModel = MLRegistry.resolve("hello-world")
 model.transform(df).select("id", "pipeline").show()
 ```
 
@@ -226,7 +226,6 @@ Note that this also pave the way to *champion/challenger* model approach where 2
 ## Backlog
 
 - serialize models using [MLeap](https://github.com/combust/mleap) to be used outside of a spark context
-- ability to publish model metrics
 
 ## Install
 
