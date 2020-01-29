@@ -19,13 +19,21 @@ object MLRegistry {
   def resolve(modelArtifactId: String): PipelineModel = {
 
     // pipeline will be exported from classpath to local disk
-    val tempDir = Files.createTempDirectory("spark-governance").toFile
-    val tempPipFile = new File(tempDir, "pipeline")
-    tempDir.deleteOnExit()
+    val tempDir = FileManager.getPath
 
-    // Extract pipeline to local disk
-    val rootPath = getClassPathFolder(modelArtifactId)
-    extractPipelineFromClasspath(tempPipFile, rootPath)
+    // Check if model was already serialized
+    val tempPipFile = if (tempDir.list().contains(modelArtifactId)) {
+      // Retrieve
+      println("File already exist")
+      new File(tempDir, modelArtifactId)
+    } else {
+      // Extract pipeline to local disk
+      println("Extract pipeline to local disk")
+      val tempPipFile = new File(tempDir, modelArtifactId)
+      val rootPath = getClassPathFolder(modelArtifactId)
+      extractPipelineFromClasspath(tempPipFile, rootPath)
+      tempPipFile
+    }
 
     // Load pipeline from local disk
     PipelineModel.load(tempPipFile.toURI.toString)
