@@ -230,7 +230,7 @@ Note that this also pave the way to *champion/challenger* model approach where 2
 ## Install
 
 ```shell script
-mvn clean package
+mvn clean package -Plocal
 ```
 
 ### Author
